@@ -1,0 +1,129 @@
+############################################
+# Functions                                #
+############################################
+
+#copy and go to dir
+function cpg (){
+  if [ -d "$2" ];then
+    cp $1 $2 && cd $2
+  else
+    cp $1 $2
+  fi
+}
+
+#move and go to dir
+function mvg (){
+  if [ -d "$2" ];then
+    mv $1 $2 && cd $2
+  else
+    mv $1 $2
+  fi
+}
+# Find a file with a pattern in name:
+function ff (){
+  find . -type f -iname '*'$*'*' -ls ; 
+}
+
+# Find a file with pattern $1 in name and Execute $2 on it:
+function fe (){
+  find . -type f -iname '*'${1:-}'*' -exec ${2:-file} {} \;  ; 
+}
+
+# Handy Extract Program.
+function extract()
+{
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2)   tar xvjf $1     ;;
+      *.tar.gz)    tar xvzf $1     ;;
+      *.bz2)       bunzip2 $1      ;;
+      *.rar)       unrar x $1      ;;
+      *.gz)        gunzip $1       ;;
+      *.tar)       tar xvf $1      ;;
+      *.tbz2)      tar xvjf $1     ;;
+      *.tgz)       tar xvzf $1     ;;
+      *.zip)       unzip $1        ;;
+      *.Z)         uncompress $1   ;;
+      *.7z)        7z x $1         ;;
+      *.jar)       jar xf $1       ;;
+      *)           echo "'$1' cannot be extracted via >extract<" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+function lowercase()  # move filenames to lowercase
+{
+    for file ; do
+        filename=${file##*/}
+        case "$filename" in
+        */*) dirname==${file%/*} ;;
+        *) dirname=.;;
+        esac
+        nf=$(echo $filename | tr A-Z a-z)
+        newname="${dirname}/${nf}"
+        if [ "$nf" != "$filename" ]; then
+            mv "$file" "$newname"
+            echo "lowercase: $file --> $newname"
+        else
+            echo "lowercase: $file not changed."
+        fi
+    done
+}
+
+function swap()  # Swap 2 filenames around, if they exist
+{                #(from Uzi's bashrc).
+    local TMPFILE=tmp.$$ 
+
+    [ $# -ne 2 ] && echo "swap: 2 arguments needed" && return 1
+    [ ! -e $1 ] && echo "swap: $1 does not exist" && return 1
+    [ ! -e $2 ] && echo "swap: $2 does not exist" && return 1
+
+    mv "$1" $TMPFILE 
+    mv "$2" "$1"
+    mv $TMPFILE "$2"
+}
+
+function chmodapa() {
+    chmod 755 "${1}"
+    find "${1}" -type d -exec chmod 755 {} \+
+    find "${1}" -type f -exec chmod 644 {} \+
+}
+
+function proxybrowser() {
+    ssh -D 8848 -f -C -q -N ${1} && chromium-browser --proxy-server="socks5://localhost:8848"
+}
+
+############################################
+# Aliases                                  #
+############################################
+
+# Directory navigation aliases
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ls='ls -F --color=auto --group-directories-first'
+alias ll='ls -Flh --color=auto --group-directories-first'
+alias la='ls -Fha --color=auto --group-directories-first'
+alias lal='ls -Flha --color=auto --group-directories-first'
+
+# prompt before removing and overwriting
+alias rm='rm -i'
+alias mv='mv -i'
+alias cp='cp -i'
+
+# Power
+alias reboot='sudo reboot'
+alias shutdown='sudo poweroff'
+
+# packages installed in ubuntu
+
+alias apt-history="sudo zcat /var/log/apt/history.log.*.gz | cat -
+/var/log/apt/history.log | grep -Po '^Commandline:(?= apt-get)(?=.* install )
+\K.*'"
+
+# package management
+
+alias updaa='sudo apt-get update; sudo apt-get upgrade'
