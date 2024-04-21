@@ -45,6 +45,16 @@ install-dependencies.ps1
 
 This section contains useful notes for newly installed systems.
 
+### Share .ssh and .aws configurations with Windows and WSL
+
+Add the following to `/etc/fstab` (replace `<your-user>`):
+
+
+```
+C:/Users/<your-user>/.ssh /home/<your-user>/.ssh drvfs rw,noatime,uid=1000,gid=1000,case=off,umask=0077,fmask=0177, 0 0
+C:/Users/<your-user>/.aws /home/<your-user>/.aws drvfs rw,noatime,uid=1000,gid=1000,case=off,umask=0077,fmask=0177, 0 0
+```
+
 ### Fix ctrl+v and ctrl-c in Windows terminal overriding vim keybinds
 
 https://learn.microsoft.com/en-us/windows/terminal/install#settings-json-file
