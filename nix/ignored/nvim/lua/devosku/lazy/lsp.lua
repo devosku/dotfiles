@@ -30,6 +30,9 @@ return {
                 "bashls",
                 "tsserver",
                 "eslint",
+                "intelephense",
+                "jdtls",
+                "pyright"
             },
             handlers = {
                 function(server_name) -- default handler (optional)
