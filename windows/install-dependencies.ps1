@@ -12,12 +12,13 @@ if ($null -eq (Get-Command aws -ErrorAction SilentlyContinue)) {
     Start-Process /wait msiexec /i C:\temp\AWSCLIV2.msi /quiet
 }
 
-# fonts
 Write-Host "Installing fonts..." -ForegroundColor "Yellow"
 scoop bucket add nerd-fonts
 scoop install nerd-fonts/FiraCode-NF
 
-# system and cli
+Write-Host "Installing sudo..." -ForegroundColor "Yellow"
+scoop install main/sudo
+
 Write-Host "Installing tools..." -ForegroundColor "Yellow"
 scoop install main/curl
 
@@ -27,17 +28,6 @@ scoop install main/pyenv
 
 Write-Host "Installing starship shell..." -ForegroundColor "Yellow"
 scoop install main/starship
-
-# following git installation with choco is disabled but kept for reference:
-# git credential manager is disabled because aws codecommit fights with it
-# choco install git.install         --limit-output -params '"/GitAndUnixToolsOnPath /NoShellIntegration /NoCredentialManager"'
-# choco install poshgit             --limit-output
-
-# Set git ssh-agent to start automatically
-# Get-Service ssh-agent | Set-Service -StartupType Automatic -PassThru | Start-Service
-
-Update-Environment
-
 
 Write-Host "Installing latest Node.js LTS with NVM..." -ForegroundColor "Yellow"
 nvm install --lts

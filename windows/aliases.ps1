@@ -51,9 +51,6 @@ Set-Alias mkd New-Directory-And-Go
 # Determine size of a file or total size of a directory
 Set-Alias fs Get-DiskUsage
 
-# Reload the shell
-Set-Alias reload Reload-Powershell
-
 # http://xkcd.com/530/
 Set-Alias mute Set-SoundMute
 Set-Alias unmute Set-SoundUnmute
